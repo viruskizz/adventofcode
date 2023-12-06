@@ -17,7 +17,6 @@ async function main() {
   const matchs = setMatchs(lines);
   let sum = 0;
   for(const match of matchs) {
-    // console.log(getWinCards(match));
     const cards = getWinCards(match);
     const point = getWinPoint(cards);
     sum += point;
@@ -46,8 +45,8 @@ function setMatchs(lines: string[]) {
     const data = line.substring(line.search(':') + 1).trim();
     const cards = data.split('|').map(el => el.trim());
     match.push({
-      wins: cards[0].split(' ').map(el => +el.trim()),
-      owns: cards[1].split(' ').map(el => +el.trim()),
+      wins: cards[0].split(' ').map(el => el.trim()).filter(el => !!el).map(el => +el),
+      owns: cards[1].split(' ').map(el => el.trim()).filter(el => !!el).map(el => +el),
     })
   }
   return match;

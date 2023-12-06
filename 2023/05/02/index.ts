@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import * as path from 'path';
 
+// const file = 'test.txt';
 const file = 'input.txt';
 
 main();
@@ -11,19 +12,29 @@ async function main() {
 	const {seeds, gardens} = setFarm(lines);
 	const farming: any[] = [];
 	const results: number[] = [];
-	for (const seed of seeds) {
-		let seeding = seed;
-		let steps: number[] = [seeding];
-		gardens.forEach(g => {
-			seeding = mapSrcDest(seeding, g);
-			steps.push(seeding);
-		})
-		results.push(seeding);
-		farming.push({seed, steps});
+	let result = Number.MAX_VALUE;
+	for (let i = 0; i < seeds.length; i += 2) {
+		const lastSeed = seeds[i] + seeds[i+1] - 1;
+		let seed = seeds[i];
+		while (seed <= lastSeed) {
+			let seeding = seed;
+			let steps: number[] = [seeding];
+			gardens.forEach(g => {
+				seeding = mapSrcDest(seeding, g);
+				steps.push(seeding);
+			})
+			// results.push(seeding);
+			// farming.push({seed, steps});
+			if (seeding < result) {
+				result = seeding;
+			}
+			seed++;
+		}
 	}
-	console.log(farming);
-	console.log(results);
-	console.log(Math.min(...results));
+	console.log(result);
+	// console.log(farming);
+	// console.log(results);
+	// console.log(Math.min(...results));
 }
 
 function mapSrcDest(seeding: number, mapper: number[][]): number {
@@ -66,3 +77,4 @@ function setFarm(lines: string[]) {
 	}
 	return {seeds, gardens};
 }
+
